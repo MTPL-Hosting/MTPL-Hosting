@@ -78,6 +78,16 @@ boolean bottomEdgeAI = (posY - ballSize/2) < (aiY + paddleHeight/2);
 
 boolean inScreen = true;
 
+int maxPoints = 1;
+
+boolean gameOver() {
+  return (playerPoints > maxPoints || aiPoints > maxPoints);
+}
+
+void resetBall() {
+
+}
+
 void draw() {
   background(255, 255, 255);
 
@@ -139,12 +149,18 @@ void draw() {
   
   // left wall - ai scores
   if (posX - ballSize/2 < 0) {
-      aiPoints += 1;
+      if (!gameOver()) {
+        aiPoints += 1;
+        resetBall();
+      }
   }
   
   // right wall - player scores
-  if (posY + ballSize/2 > width) {
-      playerPoints += 1;
+  if (posX + ballSize/2 > width) {
+      if (!gameOver()) {
+        playerPoints += 1;
+        resetBall();
+      }
   }
   
   
@@ -178,4 +194,12 @@ void draw() {
   
   
   rect(aiX - paddleWidth/2, aiY - paddleHeight/2, paddleWidth, paddleHeight);
+  
+  // scoreboard
+  // magenta
+  // (r, g, b)
+  fill(255, 0, 255);
+  textSize(50);
+  text("Player: " + playerPoints, 75, 50);
+  text("AI: " + aiPoints, 325, 50);
 }
